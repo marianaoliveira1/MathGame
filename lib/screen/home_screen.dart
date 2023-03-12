@@ -26,6 +26,26 @@ class _HomeScreenState extends State<HomeScreen> {
     '0',
   ];
 
+  String userAnswer = '';
+
+  void buttonTapped(String button) {
+    setState(() {
+      if (button == '=') {
+        checkResult();
+      } else if (button == 'C') {
+        userAnswer = '';
+      } else if (button == 'DEL') {
+        if (userAnswer.isNotEmpty) {
+          userAnswer = userAnswer.substring(0, userAnswer.length - 1);
+        }
+      } else if (userAnswer.length < 3) {
+        userAnswer += button;
+      }
+    });
+  }
+
+  void checkResult() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +59,25 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
               child: Container(
             child: Center(
-              child: Text('1 + 1 = ?', style: whiteTextStyle),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('1 + 1 = ', style: whiteTextStyle),
+                  Container(
+                    height: 50,
+                    width: 105,
+                    decoration: BoxDecoration(
+                        color: Colors.deepPurple[400],
+                        borderRadius: BorderRadius.circular(4)),
+                    child: Center(
+                      child: Text(
+                        userAnswer,
+                        style: whiteTextStyle,
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           )),
           Expanded(
@@ -50,7 +88,10 @@ class _HomeScreenState extends State<HomeScreen> {
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 4),
               itemBuilder: (context, index) {
-                return MyButton(child: numberPad[index]);
+                return MyButton(
+                  child: numberPad[index],
+                  onTap: () => buttonTapped(numberPad[index]),
+                );
               },
             ),
           ),

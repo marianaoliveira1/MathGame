@@ -3,10 +3,11 @@ import 'package:mathgame/const.dart';
 
 class MyButton extends StatelessWidget {
   final String child;
+  final VoidCallback onTap;
 
   var buttonColor = Colors.deepPurple[400];
 
-  MyButton({super.key, required this.child});
+  MyButton({super.key, required this.child, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +21,16 @@ class MyButton extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(4.0),
-      child: Container(
-        decoration: BoxDecoration(
-            color: buttonColor, borderRadius: BorderRadius.circular(5)),
-        child: Center(
-          child: Text(
-            child,
-            style: whiteTextStyle,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          decoration: BoxDecoration(
+              color: buttonColor, borderRadius: BorderRadius.circular(5)),
+          child: Center(
+            child: Text(
+              child,
+              style: whiteTextStyle,
+            ),
           ),
         ),
       ),
