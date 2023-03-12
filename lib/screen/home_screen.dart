@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mathgame/const.dart';
 import 'package:mathgame/util/my_botton.dart';
+import 'package:mathgame/util/result_message.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,6 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
     '0',
   ];
 
+  int numberA = 1;
+  int numberB = 1;
+
   String userAnswer = '';
 
   void buttonTapped(String button) {
@@ -44,17 +50,56 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void checkResult() {}
+  void checkResult() {
+    if (numberA + numberB == int.parse(userAnswer)) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return ResultMessage(
+              message: 'Acertou meu patrão',
+              onTap: goToNextQuestion,
+              icon: Icons.arrow_forward,
+            );
+          });
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return ResultMessage(
+              message: 'Vish chefia, errou',
+              onTap: goBackToQuestion,
+              icon: Icons.rotate_left,
+            );
+          });
+    }
+  }
+
+  var randomNumber = Random();
+
+  void goToNextQuestion() {
+    Navigator.of(context).pop();
+
+    setState(() {
+      userAnswer = '';
+    });
+
+    numberA = randomNumber.nextInt(10);
+    numberB = randomNumber.nextInt(10);
+  }
+
+  void goBackToQuestion() {
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black87,
+      backgroundColor: Colors.deepPurple[300],
       body: Column(
         children: [
           Container(
-            height: 200,
-            color: Colors.black,
+            height: 160,
+            color: Colors.deepPurple,
           ),
           Expanded(
               child: Container(
@@ -62,7 +107,8 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('1 + 1 = ', style: whiteTextStyle),
+                  Text(numberA.toString() + ' + ' + numberB.toString() + ' = ',
+                      style: whiteTextStyle),
                   Container(
                     height: 50,
                     width: 105,
